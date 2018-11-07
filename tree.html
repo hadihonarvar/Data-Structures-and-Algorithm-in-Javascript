@@ -1,0 +1,176 @@
+<script type="text/javascript" charset="utf-8">
+	class Node {
+		constructor (value,left,right) {
+			this.value = value
+			this.left  = left||null;
+			this.right = right||null;
+		}
+	}
+
+	class Tree {
+		constructor () {
+			this.root = null; 
+		}
+
+	    getRootNode() {
+	    	if (this.root)
+	    		return this.root
+	    	return null;
+	    }
+
+	    insert (val) {
+	    	if (this.root == null) {
+	    		this.root = new Node(val)
+	    	} else {
+	    		this.insertNode(this.root,new Node(val))
+	    	}
+	    }
+
+	    insertNode(oldNode,newNode) {
+	    	if (oldNode.value>newNode.value) {
+	    		if (oldNode.left==null) {
+	    			oldNode.left = newNode
+	    		} else {
+	    			this.insertNode(oldNode.left,newNode)
+	    		}
+	    	}
+	    	if (oldNode.value<newNode.value) {
+	    		if (oldNode.right==null) {
+	    			oldNode.right = newNode
+	    		} else {
+	    			this.insertNode(oldNode.right,newNode)
+	    		}
+	    	}
+	    }
+
+	    delete(value) {
+	    	this.root = this.deleteNode(this.root,value)
+	    }
+
+	    deleteNode(node,value) {
+	    	// 1. finding the node to delete. 
+	    	if (node == null) return null;
+		    if (value<node.value) {
+		    	node.left = this.deleteNode(node.left,value)
+		    	return node;
+		    }
+		    if (value>node.value) {
+		    	node.right = this.deleteNode(node.right,value)
+		    	return node; 
+		    }
+		    // 2. deleting: 
+		    if (node.left==null&&node.right==null){
+		    	node = null;
+		    	return node;
+		    }
+		    if (node.left==null){
+		    	node = node.right;
+		    	return node;
+		    }
+		    if (node.right==null){
+		    	node = node.left;
+		    	return node;
+		    }
+
+		    // if node has both childs:
+		    var temp = this.findMax(node.left)
+		    node.value = temp.value
+
+		    node.left = this.deleteNode(node.left,temp.value)
+		    return node
+	    }
+
+		searchNode (value,oldNode) {
+			if (this.root == null) return false 
+			if (oldNode == null) oldNode = this.root;
+			console.log("found: ",oldNode)
+			if (oldNode.value == value) {return oldNode} 
+			if (oldNode.value>value && oldNode.left!= null) return this.searchNode(value,oldNode.left)
+			if (oldNode.value<value && oldNode.right!= null) return this.searchNode(value,oldNode.right)
+			console.log(value,"not found!")
+		}
+
+
+		findMin(node) {
+			if (this.root == null) return false;
+			if (node == null) node = this.root;
+			if (node.left == null) return node; 
+			return this.findMin(node.left);
+		}
+
+		findMax(node) {
+			if (this.root == null) return false;
+			if (node == null) node = this.root;
+			if (node.right == null) return node; 
+			return this.findMax(node.right);
+		}
+
+		maxDepth(node) { // aka height
+			if (this.root == null) return 0;
+			if (node == null) node = this.root;
+
+			var lDepth = node.left ? this.maxDepth(node.left): 0
+			var rDepth = node.right? this.maxDepth(node.right): 0
+
+			return Math.max(lDepth, rDepth) + 1;
+		}
+
+		minDepth(node){
+			if (this.root == null) return 0;
+			if (node == null) node = this.root;
+
+			if (!node.right&&!node.left) return 1	
+			if (!node.left) 			 return this.minDepth(node.right)+1
+			if (!node.right)			 return this.minDepth(node.left)+1
+
+			return Math.min( this.minDepth(node.left), this.minDepth(node.right))+1;
+		}
+
+	}
+
+	var tree = new Tree()
+
+	tree.insert(7) // root
+	tree.insert(8)
+	tree.insert(5)
+	tree.insert(2)
+	tree.insert(3)
+	tree.insert(6)
+	tree.insert(5.5)
+	tree.insert(9)
+	tree.insert(1)
+	tree.insert(2.5)
+	//tree.insert(10)
+
+	console.log(tree.maxDepth(null))
+	console.log(tree.minDepth(null))
+
+
+	//tree.delete(6)
+	// console.log("search---------------------------------------------------------")
+	// tree.searchNode(9)
+	// console.log("min------------------------------------------------------------")
+	// tree.findMin()
+	// console.log("max------------------------------------------------------------")
+	// tree.findMax()
+	tree.delete(5)
+	console.log("tree: ",tree)
+	// console.log(1,tree)
+
+
+
+
+
+/*
+    		  7 
+    		/  \
+  delete->(5)    8 
+	  	  / \    \
+	  	 2	 6	  9
+	  	/ \  /	 	
+	   1 "3" 5.5	 
+		 /
+	   2.5  
+
+*/
+</script>					

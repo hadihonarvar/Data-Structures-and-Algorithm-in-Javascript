@@ -1,0 +1,81 @@
+<script type="text/javascript">
+	class Node {
+		constructor (value) {
+			this.value = value;
+			this.next = null;
+			this.prev = null;
+		}
+	}
+
+	class List {
+		constructor (head) {
+			this.head = null;
+		}
+
+		add(value) {
+			if (this.head==null) {
+				this.head = new Node(value);
+			} else {
+				this.addNode(this.head,new Node(value))
+			}
+		}
+
+		addNode(oldNode,newNode) {
+			if (oldNode.next==null) {
+				oldNode.next = newNode;
+			} else {
+				this.addNode(oldNode.next,newNode)
+			}
+		}
+
+		delete(value) {
+			if (this.head.value == value){
+				this.head = this.head.next;
+				return 
+			}
+			this.deleteNode(this.head,this.head.next,value)
+		}
+
+		deleteNode(oldNode,newNode,value) {
+			if (newNode.value == value) {
+				oldNode.next = oldNode.next.next
+				newNode == null;
+			} else {
+				this.deleteNode(newNode,newNode.next,value)
+			}
+		}
+
+		insertAfter(value,nodeVal) { // value to add, node (value) to insert after this node 
+			var newNode = new Node(value)
+			newNode.next = this.find(nodeVal).next
+			this.find(nodeVal).next = newNode
+		}
+
+		find(value) {
+			return this.findNode(this.head,value)
+		}
+		findNode(node,value) {
+			if (node.value == value) {
+				return node
+			} else {
+				return this.findNode(node.next,value)
+			}
+		}
+
+	}
+
+	var list = new List(); 
+	
+	list.add(1)
+	list.add(2)
+	list.add(3)
+	list.add(4)
+	list.add(5)
+
+	list.delete(4)
+	list.find(3)
+	list.insertAfter(100,5)
+	console.log(list)
+
+
+</script>			

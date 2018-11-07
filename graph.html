@@ -1,0 +1,106 @@
+
+
+<script type="text/javascript">
+
+	class Graph {
+		constructor () {
+			this.adjList = {}
+		}
+
+		addVertex (vertex) {
+			this.adjList[vertex] = [];
+		}
+
+		addEdge(fromVertex,toVertex) {
+			this.adjList[fromVertex].push(toVertex)
+			this.adjList[toVertex].push(fromVertex)
+		}
+
+		bfs(startNode,endNode) {
+			var visitedNodes = {}
+			Object.keys(this.adjList).forEach(function (vertex){
+				visitedNodes[vertex] = false;
+			})
+			var q = []
+			q.push(startNode)
+			visitedNodes[startNode] = true
+
+			while(q.length) {
+				var node = q.shift()
+
+				if (node==endNode) {
+					console.log("found:",node)
+					break
+				}
+				var neighborNodes = this.adjList[node]
+				console.log(node,q,neighborNodes,visitedNodes)
+
+				for (var i = 0; i < neighborNodes.length; i++) {
+					var newNode = neighborNodes[i]
+					if(!visitedNodes[newNode]) {
+						visitedNodes[newNode] = true;
+						q.push(newNode)
+					}
+				}
+			}
+
+		}
+
+		dfs(startNode,endNode) {
+			var visitedNodes = {}
+			Object.keys(this.adjList).forEach(function (vertex) {
+				visitedNodes[vertex] = false
+			})
+			var stack = []
+			stack.push(startNode)
+			visitedNodes[startNode] = true
+
+			while(stack.length){
+				var node = stack.pop()
+				visitedNodes[node] = true // needs improvement
+				console.log(node,stack,visitedNodes)
+				if (node == endNode) {
+					console.log("found:", node)
+					break;
+				}
+
+				var neighborNodes = this.adjList[node]
+				for (var i = 0; i < neighborNodes.length; i++) {
+					var newNode = neighborNodes[i]
+					if (!visitedNodes[newNode]){
+						stack.push(newNode)
+					}
+				}
+				
+			}
+		}
+
+	}	
+
+
+
+
+	// Using the above implemented graph class 
+	var g = new Graph(6); 
+	var vertices = [ 'A', 'B', 'C', 'D', 'E', 'F' ]; 
+	  
+	// adding vertices 
+	for (var i = 0; i < vertices.length; i++) { 
+	    g.addVertex(vertices[i]); 
+	} 
+	  
+	// adding edges 
+	g.addEdge('A', 'B'); 
+	g.addEdge('A', 'D'); 
+	g.addEdge('A', 'E'); 
+	g.addEdge('B', 'C'); 
+	g.addEdge('D', 'E'); 
+	g.addEdge('E', 'F'); 
+	g.addEdge('E', 'C'); 
+	g.addEdge('C', 'F'); 
+	  
+	console.log(g.adjList)
+	//g.bfs('A','C')
+	g.dfs('A','B')
+
+</script>			
